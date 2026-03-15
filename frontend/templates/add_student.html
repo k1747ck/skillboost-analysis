@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Student</title>
+</head>
+<body>
+
+<h2>Add Student</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <input type="text" name="name" placeholder="Name"><br><br>
+    <input type="email" name="email" placeholder="Email"><br><br>
+    <input type="text" name="course" placeholder="Course"><br><br>
+    <input type="number" step="0.01" name="score" placeholder="Score"><br><br>
+
+    <button type="submit">Save</button>
+</form>
+
+</body>
+</html>

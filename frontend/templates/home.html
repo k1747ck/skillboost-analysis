@@ -2,11 +2,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SkillBoost Analysis</title>
+    <title>SkillBoost Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
-    <h1>Hello {{ name }} </h1>
-    <p>{{ role }}</p>
+
+    <h1>SkillBoost Analytics Dashboard</h1>
+        {% if graph %}
+        <h2>Score Distribution</h2>
+        <img src="data:image/png;base64,{{ graph }}" />
+        {% endif %}
+
+        <h2>Top Performers</h2>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Score</th>
+    </tr>
+
+    {% for student in top_students %}
+    <tr>
+        <td>{{ student.name }}</td>
+        <td>{{ student.course }}</td>
+        <td>{{ student.score }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+
+    <div class="container">
+
+        <div class="card">
+            <h2>Total Students</h2>
+            <p>{{ total_students }}</p>
+
+        </div>
+
+        <div class="card">
+            <h2>Average Score</h2>
+            <p>{{ average_score }}</p>
+
+        </div>
+
+        <div class="card">
+            <h2>Top Performer</h2>
+            <p>{{ top_student.name }}</p>
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+        
+        <a href="/add/">
+    <button>Add Student Data</button>
+        </a>
+
+        <button>View Reports</button>
+    </div>
+
 </body>
 </html>
+

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'home',
 ]
 
 
@@ -118,3 +119,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR.parent / 'frontend' / 'static']
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR.parent / 'frontend' / 'static',
+]
+
