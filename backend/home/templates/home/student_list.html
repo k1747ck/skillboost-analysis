@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Students — SkillBoost</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #F7F7F5; --surface: #FFFFFF; --border: #E8E8E4; --text-primary: #1A1A18; --text-secondary: #6B6B65; --text-muted: #9E9E96; --accent: #2563EB; --accent-light: #EEF3FF; --good: #16A34A; --good-light: #F0FDF4; --average: #D97706; --average-light: #FFFBEB; --risk: #DC2626; --risk-light: #FEF2F2; --radius: 12px; --radius-sm: 8px; --shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; font-size: 15px; }
+  .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 28px 0; z-index: 100; overflow-y: auto; }
+  .sidebar-logo { padding: 0 24px 28px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .sidebar-logo span { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+  .sidebar-logo small { display: block; font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 24px; color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.15s; border-left: 3px solid transparent; }
+  .nav-item:hover { background: var(--bg); color: var(--text-primary); }
+  .nav-item.active { color: var(--accent); background: var(--accent-light); border-left-color: var(--accent); }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .sidebar-footer { margin-top: auto; padding: 16px 24px 0; border-top: 1px solid var(--border); }
+  .sidebar-footer p { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+  .sidebar-footer strong { color: var(--text-primary); display: block; margin-bottom: 10px; font-size: 13px; }
+  .sidebar-footer a.run-btn { display: block; text-align: center; padding: 9px; background: var(--accent); color: white; border-radius: var(--radius-sm); text-decoration: none; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .sidebar-footer a.logout { display: block; text-align: center; padding: 9px; background: #fee2e2; color: #dc2626; border-radius: var(--radius-sm); text-decoration: none; font-size: 13px; font-weight: 500; }
+  .main { margin-left: 220px; padding: 36px 40px; }
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; }
+  .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.5px; }
+  .page-header p { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+  .btn-primary { padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary:hover { opacity: 0.9; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-size: 14px; font-weight: 600; }
+  .card-badge { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-muted); background: var(--bg); padding: 3px 8px; border-radius: 20px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; padding: 12px 24px; text-align: left; border-bottom: 1px solid var(--border); background: var(--bg); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--bg); }
+  tbody td { padding: 13px 24px; font-size: 14px; }
+  .td-muted { color: var(--text-secondary); font-size: 13px; }
+  .td-mono { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); }
+  .score-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+  .score-good { background: var(--good-light); color: var(--good); }
+  .score-avg  { background: var(--average-light); color: var(--average); }
+  .score-risk { background: var(--risk-light); color: var(--risk); }
+  .action-btn { display: inline-flex; align-items: center; padding: 5px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; text-decoration: none; transition: all 0.15s; border: 1px solid var(--border); color: var(--text-secondary); background: var(--surface); margin-right: 4px; }
+  .action-btn:hover { background: var(--bg); }
+  .action-btn.danger { color: var(--risk); border-color: #FECACA; }
+  .action-btn.danger:hover { background: var(--risk-light); }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><span>SkillBoost</span><small>Analytics Platform</small></div>
+  <nav>
+    <a href="/" class="nav-item"><span class="nav-icon">⊞</span> Dashboard</a>
+    <a href="/students/" class="nav-item active"><span class="nav-icon">◎</span> Students</a>
+    <a href="/predict/" class="nav-item"><span class="nav-icon">◈</span> ML Prediction</a>
+    <a href="/add/" class="nav-item"><span class="nav-icon">＋</span> Add Student</a>
+  </nav>
+  <div class="sidebar-footer">
+    <p>Logged in as</p>
+    <strong>{{ request.session.student_name }}</strong>
+    <a href="/predict/" class="run-btn">Run Prediction →</a>
+    <a href="/logout/" class="logout">Logout</a>
+  </div>
+</aside>
+<main class="main">
+  <div class="page-header">
+    <div>
+      <h1>Students</h1>
+      <p>All enrolled students, sorted by performance</p>
+    </div>
+    <a href="/add/" class="btn-primary">＋ Add Student</a>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Student roster</span>
+      <span class="card-badge">{{ students|length }} students</span>
+    </div>
+    {% if students %}
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Course</th><th>Attendance</th><th>Mid-Term</th><th>Aggregate</th><th>Label</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td class="td-mono">{{ student.student_id }}</td>
+          <td><strong>{{ student.name }}</strong><div class="td-muted" style="font-size:12px;">{{ student.email }}</div></td>
+          <td class="td-muted">{{ student.course }}</td>
+          <td class="td-mono">{{ student.attendance_percentage }}%</td>
+          <td class="td-mono">{{ student.mid_term_marks }}</td>
+          <td>
+            {% if student.aggregate_academic_score >= 75 %}<span class="score-pill score-good">{{ student.aggregate_academic_score }}</span>
+            {% elif student.aggregate_academic_score >= 50 %}<span class="score-pill score-avg">{{ student.aggregate_academic_score }}</span>
+            {% else %}<span class="score-pill score-risk">{{ student.aggregate_academic_score }}</span>{% endif %}
+          </td>
+          <td>
+            {% if student.performance_label %}
+              {% if student.performance_label == "good" %}<span class="score-pill score-good">{{ student.performance_label|capfirst }}</span>
+              {% elif student.performance_label == "average" %}<span class="score-pill score-avg">{{ student.performance_label|capfirst }}</span>
+              {% else %}<span class="score-pill score-risk">{{ student.performance_label|capfirst }}</span>{% endif %}
+            {% else %}<span style="color:var(--text-muted);font-size:12px;">—</span>{% endif %}
+          </td>
+          <td>
+            <a href="/edit/{{ student.id }}/" class="action-btn">Edit</a>
+            <a href="/delete/{{ student.id }}/" class="action-btn danger">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><p>No students yet. <a href="/add/" style="color:var(--accent);">Add your first student →</a></p></div>
+    {% endif %}
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Delete Student — SkillBoost</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #F7F7F5; --surface: #FFFFFF; --border: #E8E8E4; --text-primary: #1A1A18; --text-secondary: #6B6B65; --risk: #DC2626; --risk-light: #FEF2F2; --radius: 12px; --radius-sm: 8px; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .modal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; }
+  .icon { width: 52px; height: 52px; background: var(--risk-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 22px; color: var(--risk); }
+  h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 8px; }
+  p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+  .student-name { color: var(--text-primary); font-weight: 500; }
+  .actions { display: flex; gap: 12px; margin-top: 28px; }
+  .btn-danger { flex: 1; padding: 11px; background: var(--risk); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .btn-danger:hover { opacity: 0.9; }
+  .btn-cancel { flex: 1; padding: 11px; background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+  .btn-cancel:hover { background: var(--bg); }
+</style>
+</head>
+<body>
+<div class="modal-card">
+  <div class="icon">✕</div>
+  <h2>Delete student?</h2>
+  <p>You are about to permanently delete <span class="student-name">{{ student.name }}</span>. This action cannot be undone.</p>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="actions">
+      <a href="/" class="btn-cancel">Cancel</a>
+      <button type="submit" class="btn-danger">Yes, Delete</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
