@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login — SkillBoost</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; font-family: "Segoe UI", sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f4f6f9; }
+        .container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .card { width: 100%; max-width: 520px; background: #fff; padding: 40px 30px; border-radius: 18px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .card h1 { font-size: 28px; font-weight: 700; color: #1a1a18; margin-bottom: 6px; }
+        .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
+        .brand { font-size: 13px; color: #2563EB; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+        .input-group { position: relative; margin: 14px 0; }
+        .input-group i.left-icon { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); color: #999; font-size: 14px; }
+        .input-group i.right-icon { position: absolute; top: 50%; right: 14px; transform: translateY(-50%); color: #999; font-size: 14px; cursor: pointer; }
+        .input-group input { width: 100%; padding: 13px 42px; border-radius: 10px; border: 1px solid #dcdcdc; background: #f9f9f9; font-size: 14px; transition: all 0.2s; }
+        .input-group input:focus { outline: none; background: #eff5ff; border-color: #2563EB; }
+        .options { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #666; margin: 10px 2px; }
+        .options a { color: #2563EB; text-decoration: none; }
+        .error-msg { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; padding: 10px; font-size: 13px; margin-bottom: 14px; }
+        button { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #2563EB; color: white; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 18px; transition: background 0.2s; }
+        button:hover { background: #1d4ed8; }
+        .divider { margin: 20px 0; color: #ccc; font-size: 13px; }
+        .switch { font-size: 13px; color: #666; margin-top: 16px; }
+        .switch a { color: #2563EB; font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="brand">SkillBoost Analytics</div>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Login to your student account</p>
+
+        {% if error %}
+        <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <i class="fa-solid fa-id-card left-icon"></i>
+                <input type="text" name="roll_number" placeholder="Roll Number" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock left-icon"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <i class="fa-solid fa-eye right-icon" id="eyeIcon" onclick="togglePassword()"></i>
+            </div>
+            <div class="options">
+                <label><input type="checkbox" checked> Keep me signed in</label>
+                <a href="#">Forgot password?</a>
+            </div>
+            <button type="submit">Login →</button>
+        </form>
+
+        <div class="divider">── or ──</div>
+        <p class="switch">
+            New here? <a href="{% url 'mentor' %}">Contact your mentor</a>
+        </p>
+    </div>
+</div>
+<script>
+function togglePassword() {
+    const p = document.getElementById("password");
+    const e = document.getElementById("eyeIcon");
+    if (p.type === "password") { p.type = "text"; e.classList.replace("fa-eye","fa-eye-slash"); }
+    else { p.type = "password"; e.classList.replace("fa-eye-slash","fa-eye"); }
+}
+</script>
+</body>
+</html>

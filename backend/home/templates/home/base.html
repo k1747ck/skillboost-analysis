@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{% block title %}SkillBoost{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0f13;--surface:#18181f;--surface2:#1e1e28;--border:#2a2a38;--accent:#6c63ff;--accent2:#00d4aa;--accent3:#ff6b6b;--text:#e8e8f0;--text-muted:#7a7a94;--text-dim:#4a4a64;--sidebar-w:220px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+.sidebar-logo .brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text);letter-spacing:-0.5px}
+.sidebar-logo .brand span{color:var(--accent)}
+.sidebar-logo .sub{font-size:0.7rem;color:var(--text-muted);margin-top:2px;letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.nav-section{font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);padding:12px 12px 6px;font-weight:600}
+.nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:var(--text-muted);text-decoration:none;font-size:0.875rem;font-weight:500;transition:all 0.2s;position:relative}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:rgba(108,99,255,0.15);color:var(--accent)}
+.nav-link.active::before{content:'';position:absolute;left:0;top:25%;bottom:25%;width:3px;background:var(--accent);border-radius:0 3px 3px 0}
+.nav-icon{width:18px;text-align:center;font-size:1rem}
+.sidebar-footer{padding:16px 12px;border-top:1px solid var(--border)}
+.user-info{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface2);margin-bottom:8px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:white;font-family:'Syne',sans-serif}
+.user-name{font-size:0.8rem;font-weight:500;color:var(--text)}
+.user-role{font-size:0.65rem;color:var(--text-muted)}
+.btn-logout{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.2);color:var(--accent3);border-radius:8px;cursor:pointer;font-size:0.825rem;font-family:'DM Sans',sans-serif;font-weight:500;text-decoration:none;transition:all 0.2s}
+.btn-logout:hover{background:rgba(255,107,107,0.2)}
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column}
+.topbar{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text)}
+.topbar-sub{font-size:0.8rem;color:var(--text-muted);margin-top:1px}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+.page-content{padding:32px;flex:1}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:0.875rem;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none}
+.btn-primary{background:var(--accent);color:white}
+.btn-primary:hover{background:#5b52ee;transform:translateY(-1px)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--border)}
+.btn-danger{background:rgba(255,107,107,0.15);color:var(--accent3);border:1px solid rgba(255,107,107,0.3)}
+.btn-danger:hover{background:rgba(255,107,107,0.25)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.card-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-weight:600;font-size:0.95rem;color:var(--text)}
+.card-body{padding:24px}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.badge-high{background:rgba(0,212,170,0.15);color:var(--accent2);border:1px solid rgba(0,212,170,0.3)}
+.badge-avg{background:rgba(108,99,255,0.15);color:var(--accent);border:1px solid rgba(108,99,255,0.3)}
+.badge-low{background:rgba(255,107,107,0.15);color:var(--accent3);border:1px solid rgba(255,107,107,0.3)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+th{padding:12px 16px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600}
+td{padding:14px 16px;font-size:0.875rem;color:var(--text);border-bottom:1px solid rgba(42,42,56,0.5)}
+tbody tr:hover{background:var(--surface2)}
+tbody tr:last-child td{border-bottom:none}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.form-control{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.875rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+.form-control:focus{border-color:var(--accent)}
+.form-control::placeholder{color:var(--text-dim)}
+select.form-control option{background:var(--surface2)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.form-section{font-family:'Syne',sans-serif;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin:24px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat-blue::before{background:var(--accent)}
+.stat-green::before{background:var(--accent2)}
+.stat-red::before{background:var(--accent3)}
+.stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600;margin-bottom:10px}
+.stat-value{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--text);line-height:1;margin-bottom:6px}
+.stat-sub{font-size:0.78rem;color:var(--text-muted)}
+.alert{padding:12px 16px;border-radius:8px;font-size:0.875rem;margin-bottom:20px}
+.alert-error{background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);color:var(--accent3)}
+.alert-success{background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.3);color:var(--accent2)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Skill<span>Boost</span></div>
+    <div class="sub">Analytics Platform</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a href="/" class="nav-link {% block nav_home %}{% endblock %}"><span class="nav-icon">⬡</span> Dashboard</a>
+    <a href="/students/" class="nav-link {% block nav_students %}{% endblock %}"><span class="nav-icon">◈</span> Students</a>
+    <div class="nav-section">Tools</div>
+    <a href="/predict/" class="nav-link {% block nav_predict %}{% endblock %}"><span class="nav-icon">◆</span> ML Prediction</a>
+    <a href="/add/" class="nav-link {% block nav_add %}{% endblock %}"><span class="nav-icon">⊕</span> Add Student</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">{{ request.session.student_name|slice:":1"|upper|default:"A" }}</div>
+      <div>
+        <div class="user-name">{{ request.session.student_name|default:"Admin" }}</div>
+        <div class="user-role">Student</div>
+      </div>
+    </div>
+    <a href="/logout/" class="btn-logout">⏻ Logout</a>
+  </div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+      <div class="topbar-sub">{% block page_sub %}{% endblock %}</div>
+    </div>
+    <div class="topbar-actions">{% block topbar_actions %}{% endblock %}</div>
+  </div>
+  <div class="page-content">{% block content %}{% endblock %}</div>
+</main>
+</body>
+</html>
